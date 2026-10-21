@@ -1,0 +1,144 @@
+DROP TABLE IF EXISTS Customer;
+CREATE TABLE Customer (
+    customer_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(10) UNIQUE,
+    age INT CHECK (age >= 18 AND age <= 100),
+    gender VARCHAR(10) CHECK (gender IN ('Male', 'Female', 'Other')),
+    city VARCHAR(50) DEFAULT 'Bhilai',
+    account_status VARCHAR(20) DEFAULT 'Active'
+        CHECK (account_status IN ('Active', 'Inactive', 'Blocked')),
+    balance NUMERIC(10,2) DEFAULT 0.00 CHECK (balance >= 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO Customer
+(first_name, last_name, email, phone, age, gender, city, balance)
+VALUES
+('Rahul', 'Sharma', 'rahul@gmail.com', '9876543210', 22, 'Male', 'Bhilai', 15000.50),
+('Priya', 'Verma', 'priya@gmail.com', '9876543211', 25, 'Female', 'Raipur', 25000.00),
+('Aman', 'Singh', 'aman@gmail.com', '9876543212', 20, 'Male', 'Durg', 5000.00),
+('Neha', 'Patel', 'neha@gmail.com', '9876543213', 28, 'Female', 'Bhilai', 12000.75),
+('Arjun', 'Das', 'arjun@gmail.com', '9876543214', 30, 'Male', DEFAULT, 8000.00);
+SELECT * FROM customer
+WHERE age >= 23; 
+SELECT * FROM Customer WHERE account_status = 'active' AND gender ='Male';
+SELECT * FROM Customer WHERE age BETWEEN 20 AND 25;
+SELECT balance FROM Customer 
+WHERE balance BETWEEN  15000 AND 25000;
+SELECT * FROM Customer;
+SELECT DISTINCT gender FROM Customer;
+SELECT * FROM Customer ORDER BY first_name ASC, last_name ASC, age DESC;
+SELECT * FROM Customer 
+WHERE city = 'Raipur' LIMIT 3;
+SELECT * FROM Customer 
+WHERE first_name LIKE 'A%';
+SELECT * FROM Customer WHERE first_name LIKE '%a' OR last_name LIKE '%a';
+DROP TABLE IF EXISTS Employee;
+CREATE TABLE Employee (
+    employee_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    department VARCHAR(50),
+    salary NUMERIC(10,2) CHECK (salary >= 0),
+    age INT CHECK (age >= 18 AND age <= 100),
+    city VARCHAR(50) DEFAULT 'Bhilai',
+    hire_date DATE DEFAULT CURRENT_DATE
+);
+INSERT INTO Employee
+(first_name, last_name, email, department, salary, age, city, hire_date)
+VALUES
+('Rahul', 'Sharma', 'rahul@company.com', 'IT', 45000, 24, 'Bhilai', '2023-01-15'),
+('Priya', 'Verma', 'priya@company.com', 'HR', 35000, 27, 'Raipur', '2022-06-10'),
+('Aman', 'Singh', 'aman@company.com', 'IT', 55000, 25, 'Durg', '2021-03-20'),
+('Neha', 'Patel', 'neha@company.com', 'Finance', 40000, 29, 'Bhilai', '2020-08-12'),
+('Arjun', 'Das', 'arjun@company.com', 'IT', 60000, 32, 'Raipur', '2019-11-05'),
+('Anjali', 'Gupta', 'anjali@company.com', 'HR', 38000, 23, 'Durg', '2024-02-01'),
+('Vikas', 'Yadav', 'vikas@company.com', 'Finance', 50000, 30, 'Bhilai', '2022-09-18'),
+('Pooja', 'Sahu', 'pooja@company.com', 'IT', 65000, 28, 'Raipur', '2018-04-25'),
+('Karan', 'Mehta', 'karan@company.com', 'Sales', 32000, 22, 'Durg', '2024-07-14'),
+('Simran', 'Kaur', 'simran@company.com', 'Sales', 42000, 26, 'Bhilai', '2023-05-30');
+SELECT * FROM Employee;
+SELECT COUNT(email) FROM Employee;
+SELECT SUM(salary) FROM Employee;
+SELECT AVG(salary) FROM Employee;
+SELECT MIN(salary) FROM Employee;
+SELECT department, COUNT(*) FROM Employee GROUP BY department;
+SELECT department, SUM(salary) FROM Employee GROUP BY department;
+SELECT CONCAT(first_name, last_name) AS full_name FROM Customer;
+SELECT CONCAT_WS(' ',first_name,last_name) AS full_name, age FROM Customer;
+SELECT SUBSTRING('Hey Buddy',4,8);
+CREATE TABLE Person (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    city VARCHAR(50),
+    age INT
+);
+INSERT INTO Person (name, city, age)
+VALUES
+    ('Rahul', 'Bhilai', 20),
+    ('Amit', 'Raipur', 21),
+    ('Priya', 'Durg', 19),
+    ('Alex', 'Delhi', 22),
+    ('Neha', 'Mumbai', 20);
+SELECT * FROM person1;
+DROP TABLE person1;
+ALTER TABLE Person ADD COLUMN Country VARCHAR(50) DEFAULT 'India';
+ALTER TABLE Person RENAME TO person1;
+ALTER TABLE person1 RENAME name TO full_name;
+ALTER TABLE person1 RENAME city TO junction;
+DROP TABLE IF EXISTS Orders;
+CREATE TABLE Orders (
+    cust_name VARCHAR(50),
+    email VARCHAR(100),
+    order_date DATE,
+    amount NUMERIC(10,2)
+);
+INSERT INTO Orders (cust_name, email, order_date, amount)
+VALUES
+    ('Rahul', 'rahul@gmail.com', '2026-10-20', 1500.00),
+    ('Aman',  'aman@gmail.com',  '2026-10-21', 2500.50),
+    ('Priya', 'priya@gmail.com', '2026-10-22', 999.99),
+    ('Alex',  'alex@gmail.com',  '2026-10-18', 3200.00),
+    ('Rohit', 'rohit@gmail.com', '2026-10-19', 750.00);
+SELECT * FROM Orders;
+CREATE TABLE Customer_Orders (
+    order_id SERIAL PRIMARY KEY,
+    order_date DATE,
+    order_amount NUMERIC(10,2)
+);
+INSERT INTO Customer_Orders (order_date, order_amount)
+VALUES
+    ('2026-10-18', 1200.00),
+    ('2026-10-19', 2500.50),
+    ('2026-10-20', 750.00),
+    ('2026-10-21', 3200.00),
+    ('2026-10-22', 999.99);
+SELECT * FROM Customer_Orders; 
+
+ALTER TABLE Orders
+ADD COLUMN cust_id SERIAL;
+ALTER TABLE Orders
+ADD PRIMARY KEY(cust_id);
+ALTER TABLE Orders
+DROP COLUMN cust_id;
+
+ALTER TABLE Customer_Orders
+ADD COLUMN cust_id INT;
+ALTER TABLE Customer_Orders
+ALTER CONSTRAINT fk_customer
+FOREIGN KEY (cust_id)
+REFERENCES Order(cust_id);
+
+SELECT * FROM Customer_Orders CROSS JOIN Orders;
+
+SELECT Customer_Orders.order_date
+FROM Customer_Orders
+INNER JOIN Orders
+ON Customer_Orders.order_date = Orders.order_date;
+
+SELECT cust_name, SUM(amount) AS total_amount
+FROM Orders
+GROUP BY cust_name;
